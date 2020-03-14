@@ -7,17 +7,18 @@ using WebApp.Infrastructure.SharedKernel;
 
 namespace WebApp.Data.Entities
 {
-    public class ProductTag : DomainEntity<int>
+    [Table("ProductImages")]
+    public class ProductImage : DomainEntity<int>
     {
         public int ProductId { get; set; }
 
-        [StringLength(50)]
-        public string TagId { set; get; }
-
         [ForeignKey("ProductId")]
-        public virtual Product Product { set; get; }
+        public virtual Product Product { get; set; }
 
-        [ForeignKey("TagId")]
-        public virtual Tag Tag { set; get; }
+        [StringLength(250)]
+        public string Path { get; set; }
+
+        [StringLength(250)]
+        public string Caption { get; set; }
     }
 }

@@ -1,45 +1,60 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 using WebApp.Data.Enums;
 using WebApp.Data.Interfaces;
 using WebApp.Infrastructure.SharedKernel;
 
 namespace WebApp.Data.Entities
 {
-    public class ProductCategory : DomainEntity<int>, IHasSeoMetaData, IHasOwner<int>, IHasSortDelete, ISortable, ISwitchable, IDateTracking
+    [Table("ProductCategories")]
+    public class ProductCategory : DomainEntity<int>,
+        IHasSeoMetaData, ISwitchable, ISortable, IDateTracking
     {
-        //list product maybe null,should be add constructor
         public ProductCategory()
         {
-            Products = new HashSet<Product>();
+            Products = new List<Product>();
         }
-        [StringLength(255)]
-        [Required]
+
+        public ProductCategory(string name,string description, int? parentId,int? homeOrder,
+            string image,bool? homeFlag,int sortOrder,Status status,string seoPageTitle,string seoAlias,
+            string seoKeywords, string seoDescription)
+        {
+            Name = name;
+            Description = description;
+            ParentId = parentId;
+            HomeOrder = homeOrder;
+            Image = image;
+            HomeFlag = homeFlag;
+            SortOrder = sortOrder;
+            Status = status;
+            SeoPageTitle = seoPageTitle;
+            SeoAlias = seoAlias;
+            SeoKeywords = seoKeywords;
+            SeoDescription = seoDescription;
+        }
         public string Name { get; set; }
+
         public string Description { get; set; }
+
         public int? ParentId { get; set; }
+
         public int? HomeOrder { get; set; }
+
         public string Image { get; set; }
-        //is home position
+
         public bool? HomeFlag { get; set; }
-        //maybe null
-        public virtual ICollection<Product> Products { get; set; }
-        #region common property
-        public DateTime CreatedDate { get; set; }
-        public DateTime ModifiedDate { get; set; }
-        public Status Status { get; set; }
-        public int SortOrder { get; set; }
-        public bool IsDeleted { get; set; }
-        public string SeoPageTitle { get; set; }
-        [Column(TypeName ="varchar")]
-        [StringLength(255)]
-        public string SeoAlias { get; set; }
-        public string SeoKeywords { get; set; }
-        public string SeoDescription { get; set; }
-        public int OwnerId { get; set; }
-        #endregion
+
+        public DateTime DateCreated { set; get; }
+        public DateTime DateModified { set; get; }
+        public int SortOrder { set; get; }
+        public Status Status { set; get; }
+        public string SeoPageTitle { set; get; }
+        public string SeoAlias { set; get; }
+        public string SeoKeywords { set; get; }
+        public string SeoDescription { set; get; }
+
+        public virtual ICollection<Product> Products { set; get; }
     }
 }

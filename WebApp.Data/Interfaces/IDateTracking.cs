@@ -6,7 +6,7 @@ namespace WebApp.Data.Interfaces
 {
     public interface IDateTracking
     {
-        DateTime CreatedDate { get; set; }
-        DateTime ModifiedDate { get; set; }
+        DateTime DateCreated { get; set; }
+        DateTime DateModified { get; set; }
     }
 }
