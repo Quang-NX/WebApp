@@ -13,6 +13,7 @@ using WebApp.Models;
 using WebApp.Services;
 using WebApp.Data.EF;
 using WebApp.Data.Entities;
+using AutoMapper;
 
 namespace WebApp
 {
@@ -36,6 +37,9 @@ namespace WebApp
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
             #region Add DI
+            //Config Automapper
+            services.AddSingleton(Mapper.Configuration);
+            services.AddScoped<IMapper>(sp => new Mapper(sp.GetRequiredService<AutoMapper.IConfigurationProvider>(), sp.GetService));
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<DbInitializer>();
