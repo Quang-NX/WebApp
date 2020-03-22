@@ -31,15 +31,37 @@ namespace WebApp
         {
             services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
-                o=>o.MigrationsAssembly("WebApp.Data.EF")));
+                o => o.MigrationsAssembly("WebApp.Data.EF")));
 
             services.AddIdentity<AppUser, AppRole>()
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
+
+            //Config Identity
+            services.Configure<IdentityOptions>(option =>
+            {
+                // Passwords Setting
+                option.Password.RequireDigit = true;
+                option.Password.RequiredLength = 6;
+                option.Password.RequireLowercase = false;
+                option.Password.RequireUppercase = false;
+                option.Password.RequireNonAlphanumeric = false;
+
+                // Logout Setting
+                option.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
+                option.Lockout.MaxFailedAccessAttempts = 10;
+
+                // User setting
+                option.User.RequireUniqueEmail = true;
+            });
+
             #region Add DI
+
             //Config Automapper
+            services.AddAutoMapper();
             services.AddSingleton(Mapper.Configuration);
             services.AddScoped<IMapper>(sp => new Mapper(sp.GetRequiredService<AutoMapper.IConfigurationProvider>(), sp.GetService));
+
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<DbInitializer>();
@@ -50,7 +72,9 @@ namespace WebApp
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env,DbInitializer dbInitializer)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env
+            //DbInitializer dbInitializer
+            )
         {
             if (env.IsDevelopment())
             {
@@ -73,7 +97,7 @@ namespace WebApp
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-            dbInitializer.Seed().Wait();
+            //dbInitializer.Seed().Wait();
         }
     }
 }

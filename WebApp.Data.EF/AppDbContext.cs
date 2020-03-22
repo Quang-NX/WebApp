@@ -86,6 +86,9 @@ namespace WebApp.Data.EF
             builder.AddConfiguration(new ProductTagConfiguration());
             builder.AddConfiguration(new SystemConfigConfiguration());
             builder.AddConfiguration(new AdvertistmentPositionConfiguration());
+            builder.AddConfiguration(new AdvertistmentPageConfiguration());
+            builder.AddConfiguration(new FunctionConfiguration());
+            builder.AddConfiguration(new AnnouncementConfiguration());
 
             //base.OnModelCreating(builder);
         }
